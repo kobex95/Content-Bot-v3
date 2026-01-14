@@ -31,9 +31,11 @@ jobs:
         python3 -m py_compile config.py && echo "✅ config.py syntax OK"
         python3 -m py_compile shared_client.py && echo "✅ shared_client.py syntax OK"
     
-    - name: Test module compilation
-      run: |
-        python3 -c "import sys; sys.path.insert(0, '.'); [compile(open(f'{m}.py').read(), f'{m}.py', 'exec') or print(f'✅ {m}.py compilation successful') for m in ['app', 'config']] or print('✅ All modules compiled successfully')"
+    - name: Test app module
+      run: python3 -c "import sys; sys.path.insert(0, '.'); compile(open('app.py').read(), 'app.py', 'exec'); print('✅ app.py compilation successful')"
+    
+    - name: Test config module
+      run: python3 -c "import sys; sys.path.insert(0, '.'); compile(open('config.py').read(), 'config.py', 'exec'); print('✅ config.py compilation successful')"
 
   build-and-publish:
     needs: test
