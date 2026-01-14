@@ -35,19 +35,14 @@ jobs:
     - name: Test module imports (without initialization)
       run: |
         # 测试模块导入但不执行初始化
-        python3 -c "
-import sys
-sys.path.insert(0, '.')
-
-# 测试主要模块的语法结构
-for module in ['app', 'config']:
-    try:
-        compile(open(f'{module}.py').read(), f'{module}.py', 'exec')
-        print(f'✅ {module}.py compilation successful')
-    except Exception as e:
-        print(f'❌ {module}.py compilation failed: {e}')
-        exit(1)
-"
+        python3 -c "import sys; sys.path.insert(0, '.'); \
+          for module in ['app', 'config']: \
+            try: \
+              compile(open(f'{module}.py').read(), f'{module}.py', 'exec'); \
+              print(f'✅ {module}.py compilation successful'); \
+            except Exception as e: \
+              print(f'❌ {module}.py compilation failed: {e}'); \
+              exit(1)"
 
   build-and-publish:
     needs: test
