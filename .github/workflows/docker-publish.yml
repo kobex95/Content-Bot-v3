@@ -32,17 +32,34 @@ jobs:
         python3 -m py_compile config.py && echo "✅ config.py syntax OK"
         python3 -m py_compile shared_client.py && echo "✅ shared_client.py syntax OK"
     
-    - name: Test module imports (without initialization)
+    - name: Test module compilation
       run: |
-        # 测试模块导入但不执行初始化
-        python3 -c "import sys; sys.path.insert(0, '.'); \
-          for module in ['app', 'config']: \
-            try: \
-              compile(open(f'{module}.py').read(), f'{module}.py', 'exec'); \
-              print(f'✅ {module}.py compilation successful'); \
-            except Exception as e: \
-              print(f'❌ {module}.py compilation failed: {e}'); \
-              exit(1)"
+        # 创建测试脚本
+        cat > test_modules.py << 'TEST_EOF'
+#!/usr/bin/env python3
+import sys
+sys.path.insert(0, '.')
+
+modules_to_test = ['app', 'config']
+
+for module in modules_to_test:
+    try:
+        with open(f'{module}.py', 'r') as f:
+            code = f.read()
+        compile(code, f'{module}.py', 'exec')
+        print(f'✅ {module}.py compilation successful')
+    except Exception as e:
+        print(f'❌ {module}.py compilation failed: {e}')
+        sys.exit(1)
+
+print('✅ All modules compiled successfully')
+TEST_EOF
+        
+        # 运行测试脚本
+        python3 test_modules.py
+        
+        # 清理测试脚本
+        rm test_modules.py
 
   build-and-publish:
     needs: test
