@@ -33,24 +33,7 @@ jobs:
     
     - name: Test module compilation
       run: |
-        python3 << 'PYEOF'
-import sys
-sys.path.insert(0, '.')
-
-modules_to_test = ['app', 'config']
-
-for module in modules_to_test:
-    try:
-        with open(f'{module}.py', 'r') as f:
-            code = f.read()
-        compile(code, f'{module}.py', 'exec')
-        print(f'✅ {module}.py compilation successful')
-    except Exception as e:
-        print(f'❌ {module}.py compilation failed: {e}')
-        sys.exit(1)
-
-print('✅ All modules compiled successfully')
-PYEOF
+        python3 -c "import sys; sys.path.insert(0, '.'); [compile(open(f'{m}.py').read(), f'{m}.py', 'exec') or print(f'✅ {m}.py compilation successful') for m in ['app', 'config']] or print('✅ All modules compiled successfully')"
 
   build-and-publish:
     needs: test
