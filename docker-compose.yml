@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  content-bot:
+    build: .
+    container_name: content-bot
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      # 从 .env 文件加载环境变量
+      - API_ID=${API_ID}
+      - API_HASH=${API_HASH}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - MONGO_DB=${MONGO_DB}
+      - DB_NAME=${DB_NAME}
+      - OWNER_ID=${OWNER_ID}
+      - LOG_GROUP=${LOG_GROUP}
+      - FORCE_SUB=${FORCE_SUB}
+      - STRING=${STRING}
+      - MASTER_KEY=${MASTER_KEY}
+      - IV_KEY=${IV_KEY}
+      - FREEMIUM_LIMIT=${FREEMIUM_LIMIT}
+      - PREMIUM_LIMIT=${PREMIUM_LIMIT}
+      - YT_COOKIES=${YT_COOKIES}
+      - INSTA_COOKIES=${INSTA_COOKIES}
+      - JOIN_LINK=${JOIN_LINK}
+      - ADMIN_CONTACT=${ADMIN_CONTACT}
+    volumes:
+      # 持久化会话文件
+      - ./sessions:/app/sessions
+      # 持久化日志文件
+      - ./logs:/app/logs
+    networks:
+      - content-bot-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  content-bot-network:
+    driver: bridge
+
+volumes:
+  sessions:
+  logs:

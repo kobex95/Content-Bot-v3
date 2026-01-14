@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  content-bot:
+    build: .
+    container_name: content-bot-dev
+    restart: "no"
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      # 开发模式下挂载整个源代码目录以支持热重载
+      - .:/app
+      - ./sessions:/app/sessions
+      - ./logs:/app/logs
+    networks:
+      - content-bot-network
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+
+networks:
+  content-bot-network:
+    driver: bridge
