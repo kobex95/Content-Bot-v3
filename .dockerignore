@@ -39,7 +39,7 @@ coverage.xml
 Thumbs.db
 
 # Documents
-*.md
+# *.md  # 注释掉以避免排除 README.md 等重要文档
 LICENSE
 
 # Development scripts
