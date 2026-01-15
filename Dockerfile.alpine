@@ -44,8 +44,8 @@ COPY . .
 # 创建必要的目录
 RUN mkdir -p sessions logs
 
-# 设置权限
-RUN chmod +x *.sh
+# 设置权限（只对存在的文件设置权限）
+RUN find . -name "*.sh" -type f -exec chmod +x {} \; 2>/dev/null || echo "No .sh files found"
 
 # 暴露端口
 EXPOSE 5000
