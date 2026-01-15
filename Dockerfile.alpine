@@ -16,34 +16,23 @@ RUN apk add --no-cache \
     openssl-dev \
     jpeg-dev \
     zlib-dev \
+    libpng-dev \
+    freetype-dev \
+    openblas-dev \
+    lapack-dev \
     && rm -rf /var/cache/apk/*
 
 # 复制依赖文件
-COPY requirements.txt .
+COPY requirements-minimal.txt .
 
 # 安装 Python 依赖
 RUN pip3 install --upgrade pip \
     && pip3 install wheel \
-    && pip3 install --no-cache-dir \
-    telethon \
-    python-dotenv \
-    psutil \
-    opencv-python-headless \
-    devgagantools \
-    aiofiles \
-    aiohttp \
-    telethon-tgcrypto \
-    motor \
-    pymongo \
-    pytz \
-    Pillow \
-    tgcrypto \
-    flask \
-    werkzeug==2.2.2 \
-    mutagen \
-    yt-dlp \
-    requests \
-    cryptography
+    && echo "Installing minimal dependencies from requirements-minimal.txt..." \
+    && pip3 install --no-cache-dir -r requirements-minimal.txt \
+    && echo "Attempting to install optional dependencies..." \
+    && pip3 install --no-cache-dir opencv-python-headless || echo "Warning: opencv-python-headless installation failed" \
+    && pip3 install --no-cache-dir devgagantools || echo "Warning: devgagantools installation failed"
 
 # 清理构建依赖以减小镜像大小
 RUN apk del gcc musl-dev libffi-dev openssl-dev jpeg-dev zlib-dev \

@@ -1,0 +1,32 @@
+# 核心依赖
+telethon
+python-dotenv
+psutil
+aiofiles
+aiohttp
+requests
+cryptography
+
+# 数据库
+motor
+pymongo
+pytz
+
+# 媒体处理
+Pillow
+tgcrypto
+mutagen
+
+# Web框架
+flask
+werkzeug==2.2.2
+
+# Telegram加密
+telethon-tgcrypto
+
+# YouTube下载
+yt-dlp
+
+# 可选依赖（如果安装失败不会影响主要功能）
+# opencv-python-headless
+# devgagantools
